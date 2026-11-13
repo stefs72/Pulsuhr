@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Diese zwei Schlüssel MÜSSEN von Hand hier stehen. Xcode kann nur eine feste Liste von
+	  Info.plist-Einträgen aus Build-Einstellungen erzeugen (INFOPLIST_KEY_…), und beide
+	  gehören nicht dazu — sie fielen beim ersten Bau stillschweigend unter den Tisch.
+
+	  Ohne `workout-processing` beendet watchOS die App, sobald der Bildschirm ausgeht; die
+	  Messung stünde still, kaum sinkt der Arm. Der Fehler wäre erst am Gerät aufgefallen.
+
+	  Die Datei liegt BEWUSST ausserhalb des Quellordners: Alles in „Pulsuhr Watch" wird vom
+	  synchronisierten Ordner automatisch als Ressource eingesammelt — eine Info.plist dort
+	  landete zusätzlich als Datei im Paket.
+	-->
+	<key>WKBackgroundModes</key>
+	<array>
+		<string>workout-processing</string>
+	</array>
+	<key>WKSupportsAlwaysOnDisplay</key>
+	<true/>
+</dict>
+</plist>
