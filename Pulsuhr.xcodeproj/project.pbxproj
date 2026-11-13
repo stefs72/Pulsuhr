@@ -277,6 +277,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
@@ -308,6 +309,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
@@ -340,12 +342,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Pulsuhr Watch/Pulsuhr Watch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PulsuhrWatch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pulsuhr liest deinen Puls, um ihn freizugeben.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pulsuhr startet eine Trainingseinheit, damit die Uhr den Puls fortlaufend misst. Sie wird nicht gespeichert.";
-				INFOPLIST_FILE = "PulsuhrWatch-Info.plist";
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Moveaware.Pulsuhr;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
@@ -373,12 +376,13 @@
 				CODE_SIGN_ENTITLEMENTS = "Pulsuhr Watch/Pulsuhr Watch.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PulsuhrWatch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Pulsuhr liest deinen Puls, um ihn freizugeben.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Pulsuhr startet eine Trainingseinheit, damit die Uhr den Puls fortlaufend misst. Sie wird nicht gespeichert.";
-				INFOPLIST_FILE = "PulsuhrWatch-Info.plist";
 				INFOPLIST_KEY_WKApplication = YES;
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = Moveaware.Pulsuhr;
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = NO;
