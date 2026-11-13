@@ -1,5 +1,9 @@
-// App-Symbol: Gesicht, bei dem die EKG-Linie der Mund ist.
-// Aufruf: swift gesicht.swift <ziel.png>
+// App-Symbol: Gesicht, bei dem die EKG-Linie der Mund ist — und zwar ein lachender.
+//
+// Aufruf: swift werkzeug-symbol.swift <ziel.png>
+// Ergebnis in beide Kataloge kopieren:
+//   Pulsuhr/Assets.xcassets/AppIcon.appiconset/icon-1024.png
+//   Pulsuhr Watch/Assets.xcassets/AppIcon.appiconset/icon-1024.png
 
 import Foundation
 import CoreGraphics
@@ -8,13 +12,15 @@ import ImageIO
 let size = 1024
 let w = CGFloat(size)
 let raum = CGColorSpaceCreateDeviceRGB()
+
+// Ohne Alpha-Kanal: App-Store-Symbole dürfen keinen haben, und zu sehen gäbe es ohnehin
+// nichts — der Verlauf füllt die ganze Fläche.
 guard let ctx = CGContext(data: nil, width: size, height: size,
                           bitsPerComponent: 8, bytesPerRow: 0, space: raum,
-                          bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+                          bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue) else {
     fatalError("Kein Zeichenkontext")
 }
 
-// Hintergrund wie gehabt.
 let farben = [
     CGColor(red: 0.84, green: 0.16, blue: 0.24, alpha: 1),
     CGColor(red: 0.45, green: 0.05, blue: 0.13, alpha: 1),
@@ -32,8 +38,8 @@ func auge(x: CGFloat, y: CGFloat, r: CGFloat, farbe: CGColor) {
     ctx.fillEllipse(in: CGRect(x: x * w - r * w, y: y * w - r * w, width: 2 * r * w, height: 2 * r * w))
 }
 
-// Mund: dieselbe EKG-Form wie bisher, nur schmaler und tiefer gesetzt.
-let mund: [(CGFloat, CGFloat)] = [
+// Der Mund als EKG-Form: flach, ein Ausschlag, flach.
+let roh: [(CGFloat, CGFloat)] = [
     (0.190, 0.370),
     (0.330, 0.370),
     (0.385, 0.455),
@@ -42,6 +48,33 @@ let mund: [(CGFloat, CGFloat)] = [
     (0.585, 0.370),
     (0.810, 0.370),
 ]
+
+// Das Lachen: eine Parabel, die an den Mundwinkeln steigt. Der Ausschlag bleibt unangetastet
+// und reitet auf der Kurve mit — so bleibt die Herzkurve lesbar, und der Mund lacht trotzdem.
+let halb: CGFloat = 0.31                       // halbe Mundbreite
+let hub: CGFloat = 0.9 * 0.075                 // wie hoch die Mundwinkel steigen
+func biegung(_ x: CGFloat) -> CGFloat {
+    let d = (x - 0.5) / halb
+    return hub * d * d - hub / 2               // halb nach unten geschoben, damit der Mund mittig bleibt
+}
+
+// Die waagrechten Stücke dicht abtasten, sonst liefen sie als gerade Sehne über die Kurve.
+func abtasten(_ punkte: [(CGFloat, CGFloat)]) -> [(CGFloat, CGFloat)] {
+    var aus: [(CGFloat, CGFloat)] = []
+    for i in 0 ..< punkte.count - 1 {
+        let a = punkte[i], b = punkte[i + 1]
+        let flach = abs(a.1 - b.1) < 0.001
+        let schritte = flach ? max(2, Int((b.0 - a.0) / 0.012)) : 1
+        for s in 0 ..< schritte {
+            let t = CGFloat(s) / CGFloat(schritte)
+            aus.append((a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t))
+        }
+    }
+    aus.append(punkte.last!)
+    return aus
+}
+
+let mund = abtasten(roh).map { ($0.0, $0.1 + biegung($0.0)) }
 
 func linie(punkte: [(CGFloat, CGFloat)], versatz: CGFloat, farbe: CGColor, breite: CGFloat) {
     ctx.setStrokeColor(farbe)
