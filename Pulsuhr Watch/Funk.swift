@@ -32,6 +32,17 @@ final class Funk: NSObject, WCSessionDelegate {
         s.sendMessage(["bpm": bpm], replyHandler: nil, errorHandler: nil)
     }
 
+    /// Dem iPhone sagen, dass Schluss ist.
+    ///
+    /// Ohne diese Nachricht bliebe dort der letzte Wert stehen und würde weiter an den Mac
+    /// gehen — eine eingefrorene Zahl ist schlechter als gar keine. Das iPhone merkt es zwar
+    /// auch von allein (es verfällt nach zehn Sekunden), aber nur so geht es sofort.
+    func sendeStop() {
+        let s = WCSession.default
+        guard s.activationState == .activated, s.isReachable else { return }
+        s.sendMessage(["stop": true], replyHandler: nil, errorHandler: nil)
+    }
+
     func session(_ session: WCSession,
                  activationDidCompleteWith activationState: WCSessionActivationState,
                  error: Error?) {}

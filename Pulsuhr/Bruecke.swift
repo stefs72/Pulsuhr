@@ -18,7 +18,15 @@ final class Bruecke: NSObject, ObservableObject {
     @Published private(set) var hinweis: String?
 
     private let sender = PulsSender()
-    private var beobachter: [NSObjectProtocol] = []
+
+    /// Nach so langer Stille gilt der Wert als veraltet.
+    ///
+    /// Zehn Sekunden sind grosszügig: HealthKit liefert beim Training im Sekundentakt, in Ruhe
+    /// aber auch mal spärlicher. Lieber einmal zu spät verfallen als bei jedem Schluckauf der
+    /// Verbindung die Anzeige leeren.
+    private let frisch: TimeInterval = 10
+    private var letzterWert: Date?
+    private var wache: Timer?
 
     func start() {
         sender.start()
@@ -30,14 +38,39 @@ final class Bruecke: NSObject, ObservableObject {
         sender.$funkt.assign(to: &$funkt)
         sender.$zuhoerer.map { $0 > 0 }.assign(to: &$verbunden)
         sender.$hinweis.assign(to: &$hinweis)
+
+        // Wache gegen stehengebliebene Werte: Schaltet die Uhr ab, geht sie ausser Reichweite
+        // oder stürzt sie ab, kommt einfach nichts mehr — ohne diese Prüfung stünde die letzte
+        // Zahl für immer da und ginge weiter an den Mac.
+        wache = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.pruefeFrische() }
+        }
     }
 
     /// Zustandszeile in Worten.
     var zustand: String {
         if let hinweis { return hinweis }
+        if puls == nil && funkt { return "warte auf die Uhr" }
         if verbunden { return "Mac liest mit" }
         if funkt { return "freigegeben – wartet auf den Mac" }
         return "startet …"
+    }
+
+    private func pruefeFrische() {
+        guard let letzter = letzterWert, Date().timeIntervalSince(letzter) > frisch else { return }
+        verfallen()
+    }
+
+    /// Kein gültiger Puls mehr: Anzeige leeren und dem Mac Null schicken.
+    ///
+    /// Die Null ist kein Pfusch, sondern das Übliche — ein Brustgurt, den man abnimmt, sendet
+    /// ebenfalls 0. Damit weiss die Gegenstelle, dass kein Kontakt besteht, statt eine alte
+    /// Zahl für bare Münze zu nehmen.
+    private func verfallen() {
+        letzterWert = nil
+        guard puls != nil else { return }
+        puls = nil
+        sender.sende(0)
     }
 }
 
@@ -55,9 +88,14 @@ extension Bruecke: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        if message["stop"] != nil {
+            Task { @MainActor in verfallen() }      // Uhr hat abgeschaltet: sofort, nicht erst nach zehn Sekunden
+            return
+        }
         guard let bpm = message["bpm"] as? Int else { return }
         Task { @MainActor in
             puls = bpm
+            letzterWert = Date()
             sender.sende(bpm)
         }
     }

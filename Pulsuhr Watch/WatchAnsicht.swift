@@ -39,7 +39,12 @@ struct WatchAnsicht: View {
 
             Button(quelle.laeuft ? "Beenden" : "Starten") {
                 Task {
-                    if quelle.laeuft { quelle.stop() } else { await quelle.start() }
+                    if quelle.laeuft {
+                        quelle.stop()
+                        funk.sendeStop()      // sonst steht die Zahl auf dem iPhone weiter
+                    } else {
+                        await quelle.start()
+                    }
                 }
             }
             .font(.caption)
