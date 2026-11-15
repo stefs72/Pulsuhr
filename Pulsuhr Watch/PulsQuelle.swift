@@ -9,7 +9,7 @@
 //
 //  **Nichts landet in Health.** Die Einheit wird am Ende verworfen (`discardWorkout`), nie
 //  gesichert. Dasselbe Muster läuft seit 1.5 in FlyMagic Hike (`WatchWorkout.swift`).
-//  Wer hier `finishWorkout` einbaut, verfälscht Stefans Ringe und Statistiken.
+//  Wer hier `finishWorkout` einbaut, verfälscht die Ringe und Statistiken der Person, die die Uhr trägt.
 //
 
 import Foundation

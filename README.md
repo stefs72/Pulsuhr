@@ -84,3 +84,7 @@ das falsche SDK übersetzt wird.
 
 Am Gerät noch nicht geprüft (Stand 15.11.2026): ob die Verbindung mit gesperrtem iPhone über eine
 ganze Einheit hält und wie viel Akku die Uhr pro Stunde braucht.
+
+## Lizenz
+
+MIT, siehe [LICENSE](LICENSE).

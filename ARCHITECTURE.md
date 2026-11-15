@@ -13,8 +13,8 @@ Pulsuhr gibt den Puls der Apple Watch als **Standard-Bluetooth-Pulsgurt** frei. 
 **MyWhoosh auf dem Mac**, funktioniert aber mit jeder App, die einen Brustgurt erwartet (Zwift,
 LightBlue …).
 
-**Das wichtigste Designprinzip ist Einfachheit.** Stefans Vorgabe: *„eifach nur den Puls
-freigeben“*.
+**Das wichtigste Designprinzip ist Einfachheit.** Die Vorgabe lautet: den Puls freigeben, sonst
+nichts.
 
 - Uhr: eine Zahl, ein Knopf. Die Messung startet beim Öffnen von selbst.
 - iPhone: eine Zahl und eine Statuszeile. Bedienen muss man dort nichts.
@@ -89,7 +89,7 @@ Hintergrundmodus**.
   Trainings-App von Apple die Session wieder wegnehmen. Stattdessen zeigt `beendet()` ehrlich
   „Messung beendet“, der Knopf springt auf „Starten“, und über `beiEnde` geht sofort `stop` ans
   iPhone, damit der Mac 0 statt einer alten Zahl bekommt. Ein automatischer Neustart war am
-  15.11.2026 kurz eingebaut und wurde auf Stefans Einwand wieder entfernt. Nicht wieder einbauen.
+  15.11.2026 kurz eingebaut und wurde nach Prüfung wieder entfernt. Nicht wieder einbauen.
 - Der von Apple vorgesehene Weg nach einem **Absturz** der App ist
   `WKApplicationDelegate.handleActiveWorkoutRecovery()` mit `HKHealthStore.recoverActiveWorkoutSession`.
   Das ist noch nicht eingebaut (§10).
@@ -228,8 +228,8 @@ xcodebuild -project Pulsuhr.xcodeproj -scheme Pulsuhr -configuration Debug \
 
 ## 9. Testen
 
-- **Kein Simulator.** Dort gibt es weder Pulssensor noch Funkmodul. Getestet wird auf Stefans
-  Apple Watch Ultra und seinem iPhone.
+- **Kein Simulator.** Dort gibt es weder Pulssensor noch Funkmodul. Getestet wird auf einer
+  Apple Watch Ultra und einem iPhone.
 - **Die Uhr muss getragen werden.** Auf dem Tisch erkennt sie kein Handgelenk und liefert
   keinen Puls. Die App sieht dann kaputt aus, ist es aber nicht.
 - Die Uhr-App kommt nicht immer automatisch mit. Dann über die Watch-App auf dem iPhone von Hand
@@ -286,8 +286,7 @@ Noch nicht eingebaut. Erst wenn der Test mit „sofort senden“ im Hintergrund 
   Falls Letzteres: das Bonding-Experiment aus §6 versuchen.
 - Wiederherstellung nach einem Absturz der Uhr-App (`handleActiveWorkoutRecovery`, §4). Nur auf
   Auftrag, falls sich Abstürze beim Testen tatsächlich zeigen.
-- **App Store: zurückgestellt** (Stefan: *„nicht jetzt. wir warten.“*). Falls doch, braucht es
-  eine Datenschutz- und eine Support-URL. Stefans Idee ist eine nicht verlinkte Seite unter
-  flymagic.app. Die liegt im aerolog-Repo und dort **ausserhalb** der erlaubten Schreibbereiche,
-  also nur auf ausdrücklichen Auftrag. Ausserdem braucht es Review-Notizen zu Guideline 4.2
-  (minimale Funktionalität).
+- **App Store: zurückgestellt.** Falls doch, braucht es eine Datenschutz- und eine Support-URL,
+  etwa eine nicht verlinkte Seite unter flymagic.app. Diese liegt in einem anderen, privaten
+  Repository, also nur auf ausdrücklichen Auftrag. Ausserdem braucht es Review-Notizen zu
+  Guideline 4.2 (minimale Funktionalität).

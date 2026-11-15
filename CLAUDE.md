@@ -18,7 +18,7 @@ MyWhoosh auf dem Mac liest ihn. Ein eigenes Produkt (Moveaware), **nicht** Teil 
 ## 3. Regeln
 
 - **Einfachheit vor allem.** Eine Zahl, ein Knopf. Keine neuen Funktionen, Einstellungen oder
-  Bildschirme ohne ausdrücklichen Auftrag. Stefan hat das mehrfach betont.
+  Bildschirme ohne ausdrücklichen Auftrag. Das ist die ausdrückliche Vorgabe des Projekts.
 - **Volle Autonomie** in diesem Repo: ändern, bauen, committen und pushen ohne Einzelbestätigung.
   Remote: `github.com/stefs72/Pulsuhr` (öffentlich). **Kein Force-Push, nie.** Nur gezielt `git add <datei>`, kein `git add -A`.
 - **Nichts in Health speichern.** Am Ende `discardWorkout()`, nie `finishWorkout`.
@@ -26,7 +26,7 @@ MyWhoosh auf dem Mac liest ihn. Ein eigenes Produkt (Moveaware), **nicht** Teil 
 - **Hintergrundmodi gehören in die Info.plist-Dateien**, nicht in `INFOPLIST_KEY_…`. Nach dem Bau
   im fertigen Paket prüfen (`ARCHITECTURE.md` §8).
 - **`project.pbxproj` nicht bearbeiten, solange Xcode das Projekt offen hat.**
-- **Kein Simulator.** Getestet wird auf Stefans Apple Watch Ultra und iPhone. Die Uhr muss
+- **Kein Simulator.** Getestet wird auf einer Apple Watch Ultra und einem iPhone. Die Uhr muss
   getragen werden.
 - Bauen mit `-destination 'generic/platform=iOS'`, nie mit `-sdk iphoneos`.
 - Sprache: Deutsch, Schweizer Schreibweise („ss“ statt „ß“) in allem, was Nutzer sehen. Code
