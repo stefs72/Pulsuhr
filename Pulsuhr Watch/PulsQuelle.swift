@@ -35,14 +35,11 @@ final class PulsQuelle: NSObject, ObservableObject {
     private let pulsTyp = HKQuantityType(.heartRate)
     private let einheit = HKUnit.count().unitDivided(by: .minute())
 
-    /// Soll gemessen werden? Bleibt `true`, bis jemand „Beenden" drückt.
-    ///
-    /// Nicht dasselbe wie `laeuft`: Räumt watchOS die Trainingseinheit ab, ist `laeuft`
-    /// falsch, obwohl der Benutzer weitermessen will. Genau dann fahren wir wieder hoch.
-    private var gewollt = false
+    /// Wird gerufen, wenn die Einheit endet, ohne dass hier „Beenden" gedrückt wurde —
+    /// damit das iPhone sofort Bescheid bekommt, statt zehn Sekunden eine alte Zahl zu senden.
+    var beiEnde: (() -> Void)?
 
     func start() async {
-        gewollt = true
         guard !laeuft else { return }
         guard HKHealthStore.isHealthDataAvailable() else {
             hinweis = "HealthKit nicht verfügbar"; return
@@ -70,8 +67,8 @@ final class PulsQuelle: NSObject, ObservableObject {
                                                    workoutConfiguration: konfiguration)
             b.delegate = self
             // Ohne diese Zeile erfahren wir NIE, dass die Einheit beendet wurde oder
-            // gescheitert ist: Die Anzeige behielte ihre letzte Zahl, die Uhr schickte
-            // nichts mehr, und niemand merkte es. Sie hat bis jetzt gefehlt.
+            // gescheitert ist: Die Anzeige behielte ihre letzte Zahl, der Knopf stünde auf
+            // „Beenden", und niemand merkte es. Sie hat bis 15.11.2026 gefehlt.
             s.delegate = self
             session = s
             sammler = b
@@ -89,7 +86,6 @@ final class PulsQuelle: NSObject, ObservableObject {
     }
 
     func stop() {
-        gewollt = false
         guard let s = session, let b = sammler else { return }
         session = nil
         sammler = nil
@@ -105,24 +101,24 @@ final class PulsQuelle: NSObject, ObservableObject {
         }
     }
 
-    /// Die Einheit ist weg, ohne dass wir sie beendet hätten.
+    /// Die Einheit ist zu Ende, ohne dass hier „Beenden" gedrückt wurde.
     ///
-    /// Das kommt vor: watchOS räumt Trainingseinheiten ab, wenn ihm die Ressourcen knapp
-    /// werden, und ein Fehler im Sensor beendet sie ebenfalls. Vorher blieb die App dann
-    /// stumm stehen — Knopf auf „Beenden", Zahl eingefroren, nichts ging mehr ans iPhone.
-    /// Jetzt fährt sie von selbst wieder hoch, solange der Benutzer nicht gestoppt hat.
-    private func verloren(_ grund: String?) async {
+    /// Eine laufende Trainingseinheit beendet watchOS nicht von sich aus. Wenn sie endet,
+    /// hat das einen Grund: Jemand hat eine andere Trainings-App gestartet (es läuft immer
+    /// nur eine), sie im Kontrollzentrum beendet, oder der Sensor meldet einen Fehler.
+    ///
+    /// Darum **kein automatischer Neustart**. Er würde gegen den Benutzer arbeiten — etwa
+    /// der Trainings-App von Apple die Einheit wieder wegnehmen. Stattdessen ehrlich anzeigen,
+    /// dass Schluss ist, und das iPhone sofort informieren. Neu starten ist ein Tipp auf den
+    /// Knopf.
+    private func beendet(_ grund: String?) {
         guard laeuft else { return }        // unser eigenes `stop()` hat das schon erledigt
         laeuft = false
         session = nil
         sammler = nil
         puls = nil
-        hinweis = grund
-
-        guard gewollt else { return }
-        try? await Task.sleep(for: .seconds(2))
-        guard gewollt, !laeuft else { return }
-        await start()
+        hinweis = grund ?? "Messung beendet"
+        beiEnde?()
     }
 }
 
@@ -153,11 +149,11 @@ extension PulsQuelle: HKWorkoutSessionDelegate {
                                     from fromState: HKWorkoutSessionState,
                                     date: Date) {
         guard toState == .ended || toState == .stopped else { return }
-        Task { @MainActor in await verloren(nil) }
+        Task { @MainActor in beendet(nil) }
     }
 
     nonisolated func workoutSession(_ workoutSession: HKWorkoutSession,
                                     didFailWithError error: Error) {
-        Task { @MainActor in await verloren("Messung abgebrochen – versuche es erneut") }
+        Task { @MainActor in beendet("Messung abgebrochen") }
     }
 }

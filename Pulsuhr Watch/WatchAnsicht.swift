@@ -53,6 +53,7 @@ struct WatchAnsicht: View {
         }
         .task {
             quelle.beiNeuemWert = { funk.sende($0) }
+            quelle.beiEnde = { funk.sendeStop() }
             await quelle.start()
         }
         // Kein Stop beim Verschwinden: Die Uhr soll weitermessen, wenn der Arm sinkt und der

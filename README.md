@@ -56,9 +56,9 @@ Bildschirm ausgeht.
   unabhängig davon, wann die Uhr liefert.
 - **Uhr prüft nicht auf `isReachable`** (`Funk`): `sendMessage` weckt die iPhone-App im
   Hintergrund; die Prüfung hatte genau das verhindert.
-- **Session-Delegate gesetzt** (`PulsQuelle`): Beendet watchOS die Trainings-Session, merkt die
-  App es und fährt nach 2 s neu hoch, solange niemand „Beenden" gedrückt hat. Gleiches Muster wie
-  `WatchWorkout.swift` in FlyMagic Hike.
+- **Session-Delegate gesetzt** (`PulsQuelle`): Endet die Trainings-Session, merkt die App es,
+  zeigt „Messung beendet" und meldet dem iPhone sofort `stop`. Kein automatischer Neustart (siehe
+  `ARCHITECTURE.md` §4). Gleiches Muster wie `WatchWorkout.swift` in FlyMagic Hike.
 - **Wiederanlauf** (`CBPeripheralManagerOptionRestoreIdentifierKey`): Räumt iOS die App ab, darf es
   sie im Hintergrund neu starten, wenn der Mac sich meldet. Die Brücke startet deshalb im
   App-Delegate, nicht in der Ansicht.
