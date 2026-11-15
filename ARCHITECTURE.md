@@ -34,7 +34,7 @@ HKWorkoutSession                    WCSession-Empfang                   MyWhoosh
    ▼                                Bruecke  ── Wert setzen ──▶ PulsSender │
 PulsQuelle ──▶ Funk ──sendMessage──▶ (Wache: 10 s ohne Wert → 0)   │      │
                {"bpm": Int}                                         │      │
-               {"stop": true}                    eigener 1-s-Takt ──┘      │
+               {"stop": true}                    sofort beim Eintreffen ┘      │
                                                  BLE Heart Rate 0x180D ────┘
 ```
 
@@ -101,10 +101,13 @@ Hintergrundmodus**.
 - Mit `bluetooth-peripheral` darf die App bei gesperrtem iPhone und im Hintergrund weiter als
   Pulsgurt dienen. Bis 15.11.2026 fehlte der Modus im fertigen Paket (siehe §8, Info.plist-Falle).
   Das war der Hauptgrund für die abreissende Verbindung.
-- **Eigener 1-s-Takt** (`PulsSender.schlag()`): Der Mac bekommt jede Sekunde den geltenden Wert,
-  unabhängig davon, wann die Uhr liefert. Vorher ging nur etwas hinaus, wenn eine Nachricht der
-  Uhr eintraf, und jedes Stocken war ein Aussetzer in MyWhoosh. `sende(_:)` setzt nur den Wert,
-  gesendet wird im Takt.
+- **Sofort senden, Takt nur als Lückenfüller** (`PulsSender.sende` → `hinaus()`). Wichtig:
+  `bluetooth-peripheral` hält die **Verbindung**, aber **nicht die App wach**. Im Hintergrund ist
+  die App eingefroren und wird nur kurz geweckt, wenn ein Ereignis eintrifft (eine
+  WatchConnectivity-Nachricht, eine Bluetooth-Anfrage). **Timer laufen dann nicht.** Darum geht
+  jeder Wert der Uhr beim Eintreffen sofort hinaus. Der 1-s-Takt (`schlag()`) füllt nur Lücken,
+  solange die App wach ist. Am 15.11.2026 wurde kurz nur im Takt gesendet. Ergebnis: Im
+  Hintergrund stand die Verbindung, aber es kam kein Puls an.
 - **Wiederanlauf:** `CBPeripheralManagerOptionRestoreIdentifierKey = "Moveaware.Pulsuhr.Sender"`.
   Räumt iOS die App ab, darf es sie im Hintergrund neu starten, sobald der Mac sich meldet.
   - `willRestoreState` übernimmt den bestehenden Dienst. **Dann nicht neu anlegen**, sonst reisst
@@ -154,7 +157,7 @@ Nur `sendMessage`. `transferUserInfo` stapelt alte Werte (FIFO) und ist deshalb 
 
 | Konstante | Wert | Ort | Zweck |
 |---|---|---|---|
-| Takt | 1 s | `PulsSender` | Wert an den Mac |
+| Takt | 1 s | `PulsSender.schlag` | füllt Lücken, nur solange die App wach ist (im Hintergrund kein Timer) |
 | Frische | 10 s | `Bruecke.frisch` | so lange gilt ein Wert ohne Nachschub |
 | Wache | 2 s | `Bruecke.wache` | prüft die Frische |
 
@@ -244,6 +247,37 @@ Alpha-Kanal** (`noneSkipLast`), denn App Store Connect weist Symbole mit Alpha a
 innerhalb des einbeschriebenen Kreises liegen, weil watchOS rund beschneidet.
 
 ## 10. Offen
+
+### Hintergrund iPhone: der offizielle Weg, falls WatchConnectivity nicht reicht
+
+Ob `sendMessage` eine eingefrorene iPhone-App **zuverlässig** weckt, wenn auch die Uhr-App im
+Hintergrund ist, ist nicht gesichert. Apple beschreibt das Wecken für eine *aktive* Uhr-App.
+Vergleichbare Open-Source-Projekte (geprüft am 15.11.2026):
+
+- `daniel-weih/wrist-pulse-cast`: gleiche Architektur (WatchConnectivity + `bluetooth-peripheral`).
+  Das README räumt ein: am stabilsten, wenn die iPhone-App im Vordergrund ist.
+- `tankbottoms/HeartRateBroadcaster`: hält das iPhone mit einem Trick wach (Hintergrundmodus
+  `audio` und ein Bild-in-Bild-Fenster, das die Zahl als Video zeigt). Für Pulsuhr zu verbastelt
+  und fragwürdig fürs App-Review.
+
+**Apples vorgesehener Weg ist das Spiegeln der Trainings-Session** (geprüft im iOS-27.2-SDK):
+
+- Uhr: `HKWorkoutSession.startMirroringToCompanionDevice()` (watchOS 10+). Laut Header wird die
+  iPhone-App dabei *im Hintergrund gestartet*.
+- iPhone: `HKHealthStore.workoutSessionMirroringStartHandler` (iOS 17+), früh beim Start setzen.
+  Er liefert die gespiegelte Session.
+- Daten: `sendToRemoteWorkoutSession(data:)` ↔ `workoutSession(_:didReceiveDataFromRemoteWorkoutSession:)`.
+  Laut Header genau für „aktuelle Messwerte“ gedacht, Grenze 100 KB pro 10 s (wir brauchen 2 Byte/s).
+- Ende: Die gespiegelte Session meldet `.ended` bzw. `didDisconnectFromRemoteDeviceWithError`.
+  Das ersetzt die `stop`-Nachricht.
+- Kosten: Die iPhone-App braucht dann ebenfalls HealthKit (Capability und Erlaubnis-Dialog).
+  Unter iOS gibt es **keinen** Hintergrundmodus `workout-processing`, den gibt es laut Xcode nur
+  unter watchOS. Ob die gespiegelte Session die App dauerhaft wach hält oder nur bei jeder
+  Nachricht weckt, ist nicht belegt. Für uns genügt das Wecken, weil sofort gesendet wird.
+
+Noch nicht eingebaut. Erst wenn der Test mit „sofort senden“ im Hintergrund weiter versagt.
+
+### Weiteres
 
 - Am Gerät noch nicht bestätigt (Stand 15.11.2026): Hält die Verbindung mit gesperrtem iPhone
   über eine ganze Einheit? Greift der Wiederanlauf nach einem Abräumen durch iOS wirklich?

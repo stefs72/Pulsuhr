@@ -8,10 +8,9 @@
 //
 //  Zwei Dinge entscheiden hier über eine stabile Verbindung:
 //
-//  1. **Eigener Takt.** Der Mac bekommt jede Sekunde einen Wert, auch wenn von der Uhr
-//     gerade keiner eintrifft. Vorher ging genau dann etwas hinaus, wenn eine Nachricht der
-//     Uhr ankam — jeder Schluckauf der Uhrenverbindung war damit sofort ein Aussetzer beim
-//     Mac. Ein Brustgurt schweigt auch nicht, nur weil er zwei Sekunden nichts Neues misst.
+//  1. **Sofort senden, Takt nur als Lückenfüller.** Jeder Wert der Uhr geht beim Eintreffen
+//     hinaus — im Hintergrund ist das der einzige Moment, in dem die App überhaupt läuft.
+//     Solange sie wach ist, füllt ein 1-s-Takt zusätzlich Lücken, wenn die Uhr stockt.
 //
 //  2. **Wiederanlauf.** Mit der Kennung unten darf iOS die App im Hintergrund neu starten,
 //     sobald der Mac sich wieder meldet. Ohne sie wäre nach einem Abräumen durch das System
@@ -46,9 +45,11 @@ final class PulsSender: NSObject, ObservableObject {
     /// läuft bereits, samt bestehender Verbindung zum Mac.
     private var ausWiederanlauf = false
 
-    /// Der Wert, der gerade gilt. Hinaus schickt ihn der Takt, nicht der Aufrufer.
+    /// Der Wert, der gerade gilt.
     private var aktuell: UInt8?
     private var takt: Timer?
+    /// Wann zuletzt etwas hinausging — damit der Takt nicht gleich nochmals sendet.
+    private var letzterVersand = Date.distantPast
 
     func start() {
         guard manager == nil else { return }
@@ -74,29 +75,52 @@ final class PulsSender: NSObject, ObservableObject {
         funkt = false
     }
 
-    /// Den Wert setzen, der ab jetzt gilt. Gesendet wird er im nächsten Takt.
+    /// Einen neuen Wert übernehmen und **sofort** hinausschicken.
+    ///
+    /// Sofort, nicht erst im Takt — das ist entscheidend für den Hintergrund. Dort friert iOS
+    /// die App ein und weckt sie nur kurz, wenn von der Uhr etwas eintrifft. Timer laufen in
+    /// der eingefrorenen Zeit nicht. Wer hier nur speichert und aufs Senden im Takt wartet,
+    /// sendet im Hintergrund nie (so war es kurz am 15.11.2026: Verbindung stand, Puls kam
+    /// keiner).
     func sende(_ bpm: Int) {
         aktuell = UInt8(clamping: bpm)
+        hinaus()
     }
 
-    /// Einmal pro Sekunde: Zuhörer zählen, Wert hinausschicken, notfalls wieder werben.
+    /// Einmal pro Sekunde, **nur solange die App wach ist**: Lücken füllen, wenn die Uhr
+    /// gerade nichts liefert, Zuhörer zählen, notfalls wieder werben.
     private func schlag() {
         guard let manager, manager.state == .poweredOn else { return }
-
-        // Die Wahrheit steht im Merkmal selbst. Mitzählen über die Delegate-Rückrufe wäre
-        // nach einem Wiederanlauf falsch: Dort meldet niemand die schon bestehenden
-        // Verbindungen noch einmal an.
-        zuhoerer = messwertMerkmal?.subscribedCentrals?.count ?? 0
+        zaehleZuhoerer()
 
         if zuhoerer == 0, messwertMerkmal != nil, !manager.isAdvertising {
             werben(manager)
         }
 
-        guard zuhoerer > 0, let merkmal = messwertMerkmal, let wert = aktuell else { return }
+        // Kam eben erst ein Wert der Uhr durch, nicht doppelt senden.
+        guard Date().timeIntervalSince(letzterVersand) >= 0.9 else { return }
+        hinaus()
+    }
+
+    /// Den geltenden Wert an alle Zuhörer schicken.
+    private func hinaus() {
+        guard let manager, manager.state == .poweredOn,
+              let merkmal = messwertMerkmal, let wert = aktuell else { return }
+        zaehleZuhoerer()
+        guard zuhoerer > 0 else { return }
         // Format nach Bluetooth-Spezifikation: erstes Byte sind Flags, zweites der Wert.
         // Flag-Bit 0 = 0 heisst „Puls passt in ein Byte" — bis 255 Schläge, das reicht.
-        // Misslingt es (Warteschlange voll), kommt in einer Sekunde der nächste Versuch.
-        _ = manager.updateValue(Data([0x00, wert]), for: merkmal, onSubscribedCentrals: nil)
+        // Misslingt es (Warteschlange voll), kommt mit dem nächsten Wert der nächste Versuch.
+        if manager.updateValue(Data([0x00, wert]), for: merkmal, onSubscribedCentrals: nil) {
+            letzterVersand = Date()
+        }
+    }
+
+    /// Die Wahrheit steht im Merkmal selbst. Mitzählen über die Delegate-Rückrufe wäre nach
+    /// einem Wiederanlauf falsch: Dort meldet niemand die schon bestehenden Verbindungen an.
+    private func zaehleZuhoerer() {
+        let n = messwertMerkmal?.subscribedCentrals?.count ?? 0
+        if n != zuhoerer { zuhoerer = n }
     }
 
     private func werben(_ peripheral: CBPeripheralManager) {
