@@ -61,8 +61,9 @@ final class Bruecke: NSObject, ObservableObject {
     var zustand: String {
         if let hinweis { return hinweis }
         if puls == nil && funkt { return "warte auf die Uhr" }
-        if verbunden { return "Mac liest mit" }
-        if funkt { return "freigegeben – wartet auf den Mac" }
+        // Bewusst „Empfänger“, nicht „Mac“: Lesen kann jedes Gerät, das einen Pulsgurt erwartet.
+        if verbunden { return "Empfänger verbunden" }
+        if funkt { return "freigegeben – wartet auf Empfänger" }
         return "startet …"
     }
 

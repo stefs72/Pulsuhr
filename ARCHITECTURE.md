@@ -162,9 +162,21 @@ Nur `sendMessage`. `transferUserInfo` stapelt alte Werte (FIFO) und ist deshalb 
 der Frische oder bei `stop` setzt die Brücke `puls = nil` und sendet 0. Eine eingefrorene Zahl
 wäre schlimmer.
 
-Statuszeile iPhone (`Bruecke.zustand`): Hinweis (Bluetooth aus …) › „warte auf die Uhr“ › „Mac
-liest mit“ › „freigegeben – wartet auf den Mac“ › „startet …“. Punkt: grün = Mac abonniert,
-orange = Werbung läuft, grau = noch nicht bereit.
+Statuszeile iPhone (`Bruecke.zustand`): Hinweis (Bluetooth aus …) › „warte auf die Uhr“ ›
+„Empfänger verbunden“ › „freigegeben – wartet auf Empfänger“ › „startet …“. In der Anzeige steht
+bewusst „Empfänger“, nicht „Mac“, denn lesen kann jedes Gerät, das einen Pulsgurt erwartet. Punkt:
+grün = Empfänger abonniert, orange = Werbung läuft, grau = noch nicht bereit.
+
+### Automatisch wieder verbinden
+
+Ob ein Empfänger sich beim nächsten Mal von selbst verbindet, entscheidet **der Empfänger**
+(MyWhoosh merkt sich Sensoren), nicht Pulsuhr. Wir können nur beeinflussen, ob er uns
+**wiedererkennt**. Ein iPhone wechselt seine Bluetooth-Adresse regelmässig (Datenschutz). Ein
+Empfänger ohne Bonding sieht dann womöglich jedes Mal ein „neues“ Gerät. Möglicher Hebel, noch
+**nicht** eingebaut und ungetestet: das Messwert-Merkmal verschlüsselt verlangen
+(`.notifyEncryptionRequired`). Dann koppeln Mac und iPhone einmal auf Systemebene, und die
+Adresse bleibt auflösbar. Das Risiko: Echte Brustgurte verlangen das nicht, und manche Apps
+kommen damit nicht zurecht. Nur nach einem Test am Gerät entscheiden (§10).
 
 ## 7. Build und Konfiguration
 
@@ -236,6 +248,8 @@ innerhalb des einbeschriebenen Kreises liegen, weil watchOS rund beschneidet.
 - Am Gerät noch nicht bestätigt (Stand 15.11.2026): Hält die Verbindung mit gesperrtem iPhone
   über eine ganze Einheit? Greift der Wiederanlauf nach einem Abräumen durch iOS wirklich?
 - Akkuverbrauch der Uhr pro Stunde.
+- Verbindet sich MyWhoosh beim nächsten Start von selbst wieder, oder muss man jedes Mal koppeln?
+  Falls Letzteres: das Bonding-Experiment aus §6 versuchen.
 - Wiederherstellung nach einem Absturz der Uhr-App (`handleActiveWorkoutRecovery`, §4). Nur auf
   Auftrag, falls sich Abstürze beim Testen tatsächlich zeigen.
 - **App Store: zurückgestellt** (Stefan: *„nicht jetzt. wir warten.“*). Falls doch, braucht es
