@@ -19,8 +19,8 @@ MyWhoosh auf dem Mac liest ihn. Ein eigenes Produkt (Moveaware), **nicht** Teil 
 
 - **Einfachheit vor allem.** Eine Zahl, ein Knopf. Keine neuen Funktionen, Einstellungen oder
   Bildschirme ohne ausdrücklichen Auftrag. Stefan hat das mehrfach betont.
-- **Volle Autonomie** in diesem Repo: ändern, bauen, committen ohne Einzelbestätigung. Gibt es
-  später ein Remote: **kein Force-Push, nie.** Nur gezielt `git add <datei>`, kein `git add -A`.
+- **Volle Autonomie** in diesem Repo: ändern, bauen, committen und pushen ohne Einzelbestätigung.
+  Remote: `github.com/stefs72/Pulsuhr` (öffentlich). **Kein Force-Push, nie.** Nur gezielt `git add <datei>`, kein `git add -A`.
 - **Nichts in Health speichern.** Am Ende `discardWorkout()`, nie `finishWorkout`.
 - **Kein automatischer Neustart der Trainings-Session** (Begründung in `ARCHITECTURE.md` §4).
 - **Hintergrundmodi gehören in die Info.plist-Dateien**, nicht in `INFOPLIST_KEY_…`. Nach dem Bau
