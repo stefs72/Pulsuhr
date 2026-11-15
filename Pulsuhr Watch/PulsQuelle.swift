@@ -35,7 +35,14 @@ final class PulsQuelle: NSObject, ObservableObject {
     private let pulsTyp = HKQuantityType(.heartRate)
     private let einheit = HKUnit.count().unitDivided(by: .minute())
 
+    /// Soll gemessen werden? Bleibt `true`, bis jemand „Beenden" drückt.
+    ///
+    /// Nicht dasselbe wie `laeuft`: Räumt watchOS die Trainingseinheit ab, ist `laeuft`
+    /// falsch, obwohl der Benutzer weitermessen will. Genau dann fahren wir wieder hoch.
+    private var gewollt = false
+
     func start() async {
+        gewollt = true
         guard !laeuft else { return }
         guard HKHealthStore.isHealthDataAvailable() else {
             hinweis = "HealthKit nicht verfügbar"; return
@@ -62,6 +69,10 @@ final class PulsQuelle: NSObject, ObservableObject {
             b.dataSource = HKLiveWorkoutDataSource(healthStore: speicher,
                                                    workoutConfiguration: konfiguration)
             b.delegate = self
+            // Ohne diese Zeile erfahren wir NIE, dass die Einheit beendet wurde oder
+            // gescheitert ist: Die Anzeige behielte ihre letzte Zahl, die Uhr schickte
+            // nichts mehr, und niemand merkte es. Sie hat bis jetzt gefehlt.
+            s.delegate = self
             session = s
             sammler = b
 
@@ -78,6 +89,7 @@ final class PulsQuelle: NSObject, ObservableObject {
     }
 
     func stop() {
+        gewollt = false
         guard let s = session, let b = sammler else { return }
         session = nil
         sammler = nil
@@ -91,6 +103,26 @@ final class PulsQuelle: NSObject, ObservableObject {
             try? await b.endCollection(at: Date())
             b.discardWorkout()
         }
+    }
+
+    /// Die Einheit ist weg, ohne dass wir sie beendet hätten.
+    ///
+    /// Das kommt vor: watchOS räumt Trainingseinheiten ab, wenn ihm die Ressourcen knapp
+    /// werden, und ein Fehler im Sensor beendet sie ebenfalls. Vorher blieb die App dann
+    /// stumm stehen — Knopf auf „Beenden", Zahl eingefroren, nichts ging mehr ans iPhone.
+    /// Jetzt fährt sie von selbst wieder hoch, solange der Benutzer nicht gestoppt hat.
+    private func verloren(_ grund: String?) async {
+        guard laeuft else { return }        // unser eigenes `stop()` hat das schon erledigt
+        laeuft = false
+        session = nil
+        sammler = nil
+        puls = nil
+        hinweis = grund
+
+        guard gewollt else { return }
+        try? await Task.sleep(for: .seconds(2))
+        guard gewollt, !laeuft else { return }
+        await start()
     }
 }
 
@@ -119,13 +151,13 @@ extension PulsQuelle: HKWorkoutSessionDelegate {
     nonisolated func workoutSession(_ workoutSession: HKWorkoutSession,
                                     didChangeTo toState: HKWorkoutSessionState,
                                     from fromState: HKWorkoutSessionState,
-                                    date: Date) {}
+                                    date: Date) {
+        guard toState == .ended || toState == .stopped else { return }
+        Task { @MainActor in await verloren(nil) }
+    }
 
     nonisolated func workoutSession(_ workoutSession: HKWorkoutSession,
                                     didFailWithError error: Error) {
-        Task { @MainActor in
-            hinweis = "Messung abgebrochen: \(error.localizedDescription)"
-            laeuft = false
-        }
+        Task { @MainActor in await verloren("Messung abgebrochen – versuche es erneut") }
     }
 }

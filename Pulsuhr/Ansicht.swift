@@ -9,7 +9,9 @@
 import SwiftUI
 
 struct Ansicht: View {
-    @StateObject private var bruecke = Bruecke()
+    // Nicht `@StateObject`: Die Brücke gehört dem Programm und läuft schon, bevor hier
+    // jemand hinschaut. Die Ansicht sieht nur zu.
+    @ObservedObject private var bruecke = Bruecke.geteilt
 
     var body: some View {
         VStack(spacing: 10) {
@@ -35,13 +37,12 @@ struct Ansicht: View {
             }
             .padding(.top, 8)
 
-            Text("Starte die Messung auf der Uhr. Das iPhone muss offen bleiben.")
+            Text("Starte die Messung auf der Uhr. Zum Koppeln die App offen lassen – danach darf sie in den Hintergrund.")
                 .font(.footnote)
                 .foregroundStyle(.tertiary)
                 .multilineTextAlignment(.center)
                 .padding(.top, 16)
                 .padding(.horizontal, 24)
         }
-        .onAppear { bruecke.start() }
     }
 }

@@ -280,11 +280,11 @@
 				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pulsuhr-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Pulsuhr gibt deinen Puls als Bluetooth-Pulsgurt frei, damit ihn Apps auf dem Mac lesen koennen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = "bluetooth-peripheral";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
@@ -312,11 +312,11 @@
 				DEVELOPMENT_TEAM = 2Y6BBPH5Y4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Pulsuhr-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Pulsuhr;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Pulsuhr gibt deinen Puls als Bluetooth-Pulsgurt frei, damit ihn Apps auf dem Mac lesen koennen.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = "bluetooth-peripheral";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;

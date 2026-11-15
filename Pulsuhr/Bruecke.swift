@@ -17,7 +17,15 @@ final class Bruecke: NSObject, ObservableObject {
     @Published private(set) var funkt = false          // ist die Freigabe aktiv?
     @Published private(set) var hinweis: String?
 
+    /// Es gibt genau eine Brücke, und sie gehört dem Programm, nicht der Ansicht.
+    ///
+    /// Startet iOS die App im Hintergrund neu, weil der Mac sich wieder verbindet, gibt es
+    /// keine sichtbare Ansicht — eine Brücke, die erst beim Hinschauen entsteht, käme nie
+    /// zustande. Angeworfen wird sie deshalb im `Delegierten` beim Programmstart.
+    static let geteilt = Bruecke()
+
     private let sender = PulsSender()
+    private var angeworfen = false
 
     /// Nach so langer Stille gilt der Wert als veraltet.
     ///
@@ -29,6 +37,8 @@ final class Bruecke: NSObject, ObservableObject {
     private var wache: Timer?
 
     func start() {
+        guard !angeworfen else { return }      // zweimal anwerfen hiesse zwei Wachen und zwei Takte
+        angeworfen = true
         sender.start()
         if WCSession.isSupported() {
             WCSession.default.delegate = self

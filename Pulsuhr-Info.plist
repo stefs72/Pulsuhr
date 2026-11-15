@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Dieser Schlüssel MUSS von Hand hier stehen — dieselbe Falle wie bei der Uhr
+	  (PulsuhrWatch-Info.plist). Als Build-Einstellung `INFOPLIST_KEY_UIBackgroundModes`
+	  verwarf Xcode ihn stillschweigend; im fertigen Paket fehlte er (geprüft 15.11.2026).
+
+	  Ohne `bluetooth-peripheral` friert iOS die App ein, sobald sie in den Hintergrund geht
+	  oder das iPhone sperrt — der Pulsgurt verschwindet für den Mac, die Verbindung reisst.
+
+	  Die Datei liegt BEWUSST ausserhalb des Quellordners: Alles in „Pulsuhr" wird vom
+	  synchronisierten Ordner automatisch als Ressource eingesammelt.
+	-->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-peripheral</string>
+	</array>
+</dict>
+</plist>

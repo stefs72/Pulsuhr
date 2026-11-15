@@ -41,9 +41,27 @@ Bildschirm ausgeht.
 ## Benutzen
 
 1. Auf der Uhr öffnen — die Messung startet von selbst.
-2. Auf dem iPhone öffnen und offen lassen. Im Hintergrund versteckt iOS die Dienstkennung so, dass
-   ein Mac sie kaum findet.
+2. Auf dem iPhone öffnen und **zum Koppeln** offen lassen. Im Hintergrund versteckt iOS die
+   Dienstkennung so, dass ein Mac sie beim Suchen kaum findet.
 3. In MyWhoosh nach einem Pulssensor suchen. Das Gerät heisst **Pulsuhr**.
+4. Danach dürfen beide in den Hintergrund: Die Uhr hält ihre Trainings-Session, das iPhone hält
+   die bestehende Bluetooth-Verbindung (`bluetooth-peripheral`).
+
+### Was die Verbindung stabil hält
+
+- **iPhone-Hintergrundmodus in einer echten Info.plist** (`Pulsuhr-Info.plist`). Als
+  `INFOPLIST_KEY_UIBackgroundModes` verwarf Xcode ihn stillschweigend — dieselbe Falle wie bei der
+  Uhr. Ohne ihn fror iOS die App beim Sperren ein und der Pulsgurt verschwand.
+- **Eigener Sekundentakt zum Mac** (`PulsSender`): Der Mac bekommt jede Sekunde den geltenden Wert,
+  unabhängig davon, wann die Uhr liefert.
+- **Uhr prüft nicht auf `isReachable`** (`Funk`): `sendMessage` weckt die iPhone-App im
+  Hintergrund; die Prüfung hatte genau das verhindert.
+- **Session-Delegate gesetzt** (`PulsQuelle`): Beendet watchOS die Trainings-Session, merkt die
+  App es und fährt nach 2 s neu hoch, solange niemand „Beenden" gedrückt hat. Gleiches Muster wie
+  `WatchWorkout.swift` in FlyMagic Hike.
+- **Wiederanlauf** (`CBPeripheralManagerOptionRestoreIdentifierKey`): Räumt iOS die App ab, darf es
+  sie im Hintergrund neu starten, wenn der Mac sich meldet. Die Brücke startet deshalb im
+  App-Delegate, nicht in der Ansicht.
 
 Zum Prüfen ohne MyWhoosh eignet sich ein BLE-Scanner auf dem Mac (z. B. LightBlue): Dort sieht man
 roh, ob der Dienst `180D` advertisiert wird und welche Werte rausgehen.
@@ -64,5 +82,5 @@ das falsche SDK übersetzt wird.
 
 ## Offen
 
-Am Gerät noch nicht geprüft: ob die Freigabe durchhält, wenn der Arm sinkt, wie viel Akku das
-kostet und ob MyWhoosh das Gerät auf Anhieb findet.
+Am Gerät noch nicht geprüft (Stand 15.11.2026): ob die Verbindung mit gesperrtem iPhone über eine
+ganze Einheit hält und wie viel Akku die Uhr pro Stunde braucht.

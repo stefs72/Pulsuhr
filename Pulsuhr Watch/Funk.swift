@@ -26,9 +26,15 @@ final class Funk: NSObject, WCSessionDelegate {
     /// Bewusst `sendMessage` ohne Antwort und ohne Fehlerbehandlung: Es geht um den Puls von
     /// jetzt. Kommt einer nicht an, folgt in einer Sekunde der nächste — nachliefern wäre
     /// falsch, ein alter Wert ist schlechter als gar keiner.
+    ///
+    /// **Nicht auf `isReachable` prüfen.** Genau das war der Grund für die abreissende
+    /// Verbindung: Sobald das iPhone den Bildschirm sperrte oder eine andere App nach vorn
+    /// kam, stand `isReachable` auf `false` — und wir warfen jeden Wert selbst weg. Dabei
+    /// ist `sendMessage` von der Uhr aus das Mittel, das die iPhone-App im Hintergrund
+    /// überhaupt erst aufweckt. Die Prüfung verhinderte also das, wofür sie gedacht war.
     func sende(_ bpm: Int) {
         let s = WCSession.default
-        guard s.activationState == .activated, s.isReachable else { return }
+        guard s.activationState == .activated else { return }
         s.sendMessage(["bpm": bpm], replyHandler: nil, errorHandler: nil)
     }
 
@@ -39,7 +45,7 @@ final class Funk: NSObject, WCSessionDelegate {
     /// auch von allein (es verfällt nach zehn Sekunden), aber nur so geht es sofort.
     func sendeStop() {
         let s = WCSession.default
-        guard s.activationState == .activated, s.isReachable else { return }
+        guard s.activationState == .activated else { return }
         s.sendMessage(["stop": true], replyHandler: nil, errorHandler: nil)
     }
 
