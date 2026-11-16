@@ -3,7 +3,7 @@
 Die Hauptquelle für alle, die an diesem Repo arbeiten. Was hier steht, ist am Code geprüft.
 Arbeitsregeln stehen in `CLAUDE.md`, die Nutzersicht im `README.md`.
 
-_Stand: 15.11.2026 · Version 1.0 (Build 1) · nicht im App Store · GitHub: [stefs72/Pulsuhr](https://github.com/stefs72/Pulsuhr) (öffentlich)_
+_Stand: 16.11.2026 · Version 1.0 (Build 1) · am Gerät mit MyWhoosh getestet · nicht im App Store · GitHub: [stefs72/Pulsuhr](https://github.com/stefs72/Pulsuhr) (öffentlich)_
 
 ---
 
@@ -173,7 +173,9 @@ grün = Empfänger abonniert, orange = Werbung läuft, grau = noch nicht bereit.
 ### Automatisch wieder verbinden
 
 Ob ein Empfänger sich beim nächsten Mal von selbst verbindet, entscheidet **der Empfänger**
-(MyWhoosh merkt sich Sensoren), nicht Pulsuhr. Wir können nur beeinflussen, ob er uns
+(MyWhoosh merkt sich Sensoren), nicht Pulsuhr. **Mit MyWhoosh bestätigt (16.11.2026):** Es
+verbindet sich ohne Bonding von selbst wieder. Das Folgende gilt also nur, falls ein anderer
+Empfänger das nicht schafft. Wir können nur beeinflussen, ob er uns
 **wiedererkennt**. Ein iPhone wechselt seine Bluetooth-Adresse regelmässig (Datenschutz). Ein
 Empfänger ohne Bonding sieht dann womöglich jedes Mal ein „neues“ Gerät. Möglicher Hebel, noch
 **nicht** eingebaut und ungetestet: das Messwert-Merkmal verschlüsselt verlangen
@@ -248,7 +250,11 @@ innerhalb des einbeschriebenen Kreises liegen, weil watchOS rund beschneidet.
 
 ## 10. Offen
 
-### Hintergrund iPhone: der offizielle Weg, falls WatchConnectivity nicht reicht
+**Am Gerät bestätigt (16.11.2026), mit MyWhoosh:** Der Puls kommt auch mit gesperrtem iPhone und
+Uhr-App im Hintergrund durch („sofort senden“, §4). MyWhoosh verbindet sich von selbst wieder.
+Spiegeln und Bonding sind damit **nicht nötig** und bleiben unten nur als Reserve dokumentiert.
+
+### Reserve – Hintergrund iPhone: der offizielle Weg, falls WatchConnectivity nicht reicht
 
 Ob `sendMessage` eine eingefrorene iPhone-App **zuverlässig** weckt, wenn auch die Uhr-App im
 Hintergrund ist, ist nicht gesichert. Apple beschreibt das Wecken für eine *aktive* Uhr-App.
@@ -275,18 +281,15 @@ Vergleichbare Open-Source-Projekte (geprüft am 15.11.2026):
   unter watchOS. Ob die gespiegelte Session die App dauerhaft wach hält oder nur bei jeder
   Nachricht weckt, ist nicht belegt. Für uns genügt das Wecken, weil sofort gesendet wird.
 
-Noch nicht eingebaut. Erst wenn der Test mit „sofort senden“ im Hintergrund weiter versagt.
+Nicht eingebaut und derzeit nicht nötig. Der Test mit „sofort senden“ hat bestanden.
 
 ### Weiteres
 
-- Am Gerät noch nicht bestätigt (Stand 15.11.2026): Hält die Verbindung mit gesperrtem iPhone
-  über eine ganze Einheit? Greift der Wiederanlauf nach einem Abräumen durch iOS wirklich?
+- Noch nicht gezielt geprüft: Greift der Wiederanlauf, wenn iOS die App abräumt?
 - Akkuverbrauch der Uhr pro Stunde.
-- Verbindet sich MyWhoosh beim nächsten Start von selbst wieder, oder muss man jedes Mal koppeln?
-  Falls Letzteres: das Bonding-Experiment aus §6 versuchen.
 - Wiederherstellung nach einem Absturz der Uhr-App (`handleActiveWorkoutRecovery`, §4). Nur auf
   Auftrag, falls sich Abstürze beim Testen tatsächlich zeigen.
-- **App Store: zurückgestellt.** Falls doch, braucht es eine Datenschutz- und eine Support-URL,
+- **App Store: noch nicht eingereicht.** Dafür braucht es eine Datenschutz- und eine Support-URL,
   etwa eine nicht verlinkte Seite unter flymagic.app. Diese liegt in einem anderen, privaten
   Repository, also nur auf ausdrücklichen Auftrag. Ausserdem braucht es Review-Notizen zu
   Guideline 4.2 (minimale Funktionalität).

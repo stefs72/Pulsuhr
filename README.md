@@ -3,6 +3,9 @@
 Gibt den Puls der Apple Watch als **Bluetooth-Pulsgurt** frei, damit Apps auf dem Mac ihn lesen
 können — gebaut für **MyWhoosh**, funktioniert aber mit allem, was einen Brustgurt erwartet.
 
+**Stand 16.11.2026: am Gerät getestet mit MyWhoosh.** Läuft im Hintergrund, auch mit gesperrtem
+iPhone, und MyWhoosh verbindet sich beim nächsten Start von selbst wieder.
+
 ## Warum zwei Teile
 
 Die Uhr allein kann es nicht. Apple sperrt den Peripheral-Betrieb auf watchOS ausdrücklich:
@@ -47,13 +50,17 @@ Bildschirm ausgeht.
 4. Danach dürfen beide in den Hintergrund: Die Uhr hält ihre Trainings-Session, das iPhone hält
    die bestehende Bluetooth-Verbindung (`bluetooth-peripheral`).
 
+Das Koppeln ist nur beim ersten Mal nötig. Danach verbindet sich MyWhoosh von selbst mit
+**Pulsuhr**, sobald die Messung auf der Uhr läuft.
+
 ### Was die Verbindung stabil hält
 
 - **iPhone-Hintergrundmodus in einer echten Info.plist** (`Pulsuhr-Info.plist`). Als
   `INFOPLIST_KEY_UIBackgroundModes` verwarf Xcode ihn stillschweigend — dieselbe Falle wie bei der
   Uhr. Ohne ihn fror iOS die App beim Sperren ein und der Pulsgurt verschwand.
-- **Eigener Sekundentakt zum Mac** (`PulsSender`): Der Mac bekommt jede Sekunde den geltenden Wert,
-  unabhängig davon, wann die Uhr liefert.
+- **Sofort senden** (`PulsSender`): Jeder Wert der Uhr geht ohne Umweg an den Empfänger. Im
+  Hintergrund laufen keine Timer; iOS weckt die App nur kurz pro Nachricht. Ein Sekundentakt
+  füllt Lücken, solange die App wach ist.
 - **Uhr prüft nicht auf `isReachable`** (`Funk`): `sendMessage` weckt die iPhone-App im
   Hintergrund; die Prüfung hatte genau das verhindert.
 - **Session-Delegate gesetzt** (`PulsQuelle`): Endet die Trainings-Session, merkt die App es,
@@ -82,8 +89,8 @@ das falsche SDK übersetzt wird.
 
 ## Offen
 
-Am Gerät noch nicht geprüft (Stand 15.11.2026): ob die Verbindung mit gesperrtem iPhone über eine
-ganze Einheit hält und wie viel Akku die Uhr pro Stunde braucht.
+- Akkuverbrauch der Uhr pro Stunde ist noch nicht gemessen.
+- App Store: noch nicht eingereicht.
 
 ## Lizenz
 
