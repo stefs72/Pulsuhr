@@ -15,7 +15,8 @@ Alles, was App Store Connect verlangt, zum Hineinkopieren. Was noch fehlt, steht
 | Version / Build | 1.0 / 1 |
 | SKU | `pulsuhr-2` |
 | Kategorie | Sport |
-| Geräte | iPhone + Apple Watch (kein iPad) |
+| Geräte | iPhone + Apple Watch (kein iPad). Mac (Apple Silicon) und Vision Pro **abgewählt**: ohne gekoppelte Uhr nutzlos |
+| Preis | gratis, alle 175 Länder |
 | Datenschutz-URL | https://github.com/stefs72/Pulsuhr/blob/main/PRIVACY.md |
 | Support-URL | https://github.com/stefs72/Pulsuhr/issues |
 | Copyright | 2026 Moveaware |
@@ -104,6 +105,5 @@ musste entfernt und neu angelegt werden (SKU jetzt `pulsuhr-2`).
 
 
 - Zwift am Gerät testen, bevor es im Store-Text steht (bisher nur MyWhoosh geprüft).
-- Preis festlegen (Vorschlag: gratis).
 - Optional, aber hilfreich gegen eine Ablehnung nach Regel 4.2: ein kurzes Bildschirmvideo
   (Uhr + MyWhoosh), als Link in den Prüfhinweisen.
