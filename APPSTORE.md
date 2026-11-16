@@ -90,8 +90,6 @@ nicht vom Schreibtisch lesen, also die Quelle vorher in einen anderen Ordner kop
 
 ## Offen
 
-- Bluetooth-Text in den Build-Einstellungen: „koennen“ → „können“, und „Apps auf dem Mac“ →
-  „Trainings-Apps wie Zwift oder MyWhoosh“. Steht in `project.pbxproj`, also erst bei geschlossenem Xcode.
 - Zwift am Gerät testen, bevor es im Store-Text steht (bisher nur MyWhoosh geprüft).
 - Preis festlegen (Vorschlag: gratis).
 - Archivieren und hochladen (Xcode → Product → Archive), Eintrag in App Store Connect anlegen.
