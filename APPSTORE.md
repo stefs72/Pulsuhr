@@ -1,6 +1,6 @@
 # App Store – Einreichung Pulsuhr 1.0
 
-**Stand 16.11.2026: Build 1.0 (1) hochgeladen.**
+**Stand 16.11.2026: Version 1.0 (1) zur App-Prüfung eingereicht, automatische Veröffentlichung nach Freigabe.**
 
 Alles, was App Store Connect verlangt, zum Hineinkopieren. Was noch fehlt, steht unter
 **Offen**.

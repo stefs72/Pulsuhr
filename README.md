@@ -91,7 +91,7 @@ das falsche SDK übersetzt wird.
 ## Offen
 
 - Akkuverbrauch der Uhr pro Stunde ist noch nicht gemessen.
-- App Store: in Vorbereitung, siehe [APPSTORE.md](APPSTORE.md).
+- App Store: am 16.11.2026 eingereicht, siehe [APPSTORE.md](APPSTORE.md).
 
 ## Datenschutz
 

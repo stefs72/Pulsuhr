@@ -3,7 +3,7 @@
 Die Hauptquelle für alle, die an diesem Repo arbeiten. Was hier steht, ist am Code geprüft.
 Arbeitsregeln stehen in `CLAUDE.md`, die Nutzersicht im `README.md`.
 
-_Stand: 16.11.2026 · Version 1.0 (Build 1) · am Gerät mit MyWhoosh getestet · nicht im App Store · GitHub: [stefs72/Pulsuhr](https://github.com/stefs72/Pulsuhr) (öffentlich)_
+_Stand: 16.11.2026 · Version 1.0 (Build 1) · am Gerät mit MyWhoosh getestet · App Store: eingereicht 16.11.2026 · GitHub: [stefs72/Pulsuhr](https://github.com/stefs72/Pulsuhr) (öffentlich)_
 
 ---
 
