@@ -14,7 +14,7 @@ Alles, was App Store Connect verlangt, zum Hineinkopieren. Was noch fehlt, steht
 | Bundle-ID | `Moveaware.Pulsuhr` (Uhr: `Moveaware.Pulsuhr.watchkitapp`) |
 | Version / Build | 1.0 / 1 |
 | SKU | `pulsuhr-2` |
-| Kategorie | Gesundheit & Fitness |
+| Kategorie | Sport |
 | Geräte | iPhone + Apple Watch (kein iPad) |
 | Datenschutz-URL | https://github.com/stefs72/Pulsuhr/blob/main/PRIVACY.md |
 | Support-URL | https://github.com/stefs72/Pulsuhr/issues |
@@ -51,32 +51,34 @@ Empfänger, den die Person selbst koppelt. Er geht nie an den Anbieter oder an D
 Zwift und MyWhoosh **nicht** in die Schlüsselwörter: Fremde App- und Markennamen dort weist Apple
 ab (Regel 2.3.7). In Beschreibung und Werbetext als „funktioniert mit“ ist es üblich.
 
-## Hinweise für die Prüfung (App Review Notes, englisch)
+## Hinweise für die Prüfung (App Review Notes)
 
-> Pulsuhr broadcasts the heart rate measured by Apple Watch as a standard Bluetooth Low Energy
-> Heart Rate Service (0x180D). It is made for indoor cycling with apps like Zwift and MyWhoosh:
-> any receiver that accepts a Bluetooth chest strap (Mac, PC, iPad, Apple TV, bike computer) can
-> use the watch instead.
+So in App Store Connect eingetragen (Deutsch):
+
+> Pulsuhr gibt den Puls, den die Apple Watch misst, als Standard-Bluetooth-Pulsgurt frei
+> (Bluetooth Low Energy Heart Rate Service, 0x180D). Gemacht ist die App fürs Indoor-Training mit
+> Apps wie Zwift und MyWhoosh: Jeder Empfänger, der einen Bluetooth-Brustgurt liest (Mac, PC,
+> iPad, Apple TV, Radcomputer), kann stattdessen die Uhr verwenden.
 >
-> Why an iPhone app: watchOS does not allow an app to act as a Bluetooth peripheral
-> (CBPeripheralManager is unavailable on watchOS). The watch measures, the iPhone relays the
-> value via WatchConnectivity and advertises it over Bluetooth.
+> Warum eine iPhone-App: Unter watchOS darf eine App kein Bluetooth-Peripheriegerät sein
+> (CBPeripheralManager ist unter watchOS nicht verfügbar). Die Uhr misst, das iPhone erhält den
+> Wert über WatchConnectivity und gibt ihn per Bluetooth frei.
 >
-> How to test:
-> 1. Wear the Apple Watch and open Pulsuhr on it. A measurement starts and the heart rate appears.
-> 2. Open Pulsuhr on the iPhone. The status shows that the heart rate is being shared.
-> 3. On any other device, open an app that reads Bluetooth heart-rate sensors (e.g. Zwift,
->    MyWhoosh, or the free BLE scanner LightBlue) and connect to "Pulsuhr".
-> Note: the watch must be worn. Without wrist detection it delivers no heart rate.
+> So testen:
+> 1. Apple Watch tragen und Pulsuhr darauf öffnen. Die Messung startet, der Puls erscheint.
+> 2. Pulsuhr auf dem iPhone öffnen. Die Statuszeile zeigt, dass der Puls freigegeben ist.
+> 3. Auf einem anderen Gerät eine App öffnen, die Bluetooth-Pulssensoren liest (z. B. Zwift,
+>    MyWhoosh oder den kostenlosen BLE-Scanner LightBlue), und mit „Pulsuhr“ verbinden.
+> Hinweis: Die Uhr muss getragen werden. Ohne Handgelenkerkennung liefert sie keinen Puls.
 >
-> HealthKit: the watch app starts an HKWorkoutSession only because that is the only way to get
-> continuous heart-rate readings. The workout is discarded at the end (discardWorkout). Nothing
-> is written to Health. Heart-rate values are not stored and never leave the user's devices
-> except over Bluetooth to a receiver the user pairs themselves. No accounts, no network access,
-> no analytics.
+> HealthKit: Die Uhr-App startet eine HKWorkoutSession nur, weil die Uhr nur so fortlaufend den
+> Puls misst. Die Einheit wird am Ende verworfen (discardWorkout), in Health wird nichts
+> gespeichert. Pulswerte werden nicht gespeichert und verlassen die Geräte nur per Bluetooth zu
+> einem Empfänger, den die Person selbst koppelt. Keine Konten, kein Internet, keine Analyse.
+> Eine Anmeldung ist nicht nötig.
 >
-> Background mode "bluetooth-peripheral" keeps the heart-rate sensor available to the paired
-> receiver while the iPhone is locked during a workout.
+> Der Hintergrundmodus „bluetooth-peripheral“ hält den Pulssensor für den gekoppelten Empfänger
+> verfügbar, während das iPhone beim Training gesperrt ist.
 
 ## Screenshots
 
