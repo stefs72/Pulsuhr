@@ -12,8 +12,8 @@ Pulsuhr erhebt, speichert und überträgt **keine Daten an uns oder an Dritte**.
 - Die Uhr schickt den aktuellen Pulswert über die Apple-eigene Verbindung (WatchConnectivity) an
   die **iPhone-App**.
 - Das iPhone gibt den Wert per **Bluetooth** als Standard-Pulsgurt frei. Lesen kann ihn nur ein
-  Gerät in Funkreichweite, das du selbst damit verbindest, zum Beispiel eine Trainings-App auf
-  deinem Mac.
+  Gerät in Funkreichweite, das du selbst damit verbindest, zum Beispiel Zwift oder MyWhoosh auf
+  deinem Computer, Tablet oder Apple TV.
 
 ## Was die App nicht tut
 

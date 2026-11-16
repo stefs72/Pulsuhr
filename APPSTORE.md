@@ -28,9 +28,10 @@ Empfänger, den die Person selbst koppelt. Er geht nie an den Anbieter oder an D
 
 > Pulsuhr macht deine Apple Watch zum Bluetooth-Pulsgurt.
 >
-> Starte die Messung auf der Uhr, und dein iPhone gibt den Puls als Standard-Pulsgurt frei.
-> Trainings-Apps auf dem Mac, zum Beispiel MyWhoosh, finden ihn wie einen Brustgurt. Nach dem
-> ersten Koppeln verbinden sie sich von selbst wieder.
+> Gemacht fürs Indoor-Training mit Zwift und MyWhoosh: Starte die Messung auf der Uhr, und dein
+> iPhone gibt den Puls als Standard-Bluetooth-Pulsgurt frei. Jeder Empfänger, der einen Brustgurt
+> lesen kann, findet ihn: Mac, PC, iPad, Apple TV oder Radcomputer. Nach dem ersten Koppeln
+> verbindet er sich von selbst wieder.
 >
 > • Eine Zahl, ein Knopf, keine Einstellungen
 > • Läuft im Hintergrund weiter, auch mit gesperrtem iPhone
@@ -40,15 +41,19 @@ Empfänger, den die Person selbst koppelt. Er geht nie an den Anbieter oder an D
 > Warum das iPhone? Die Apple Watch selbst kann keinen Bluetooth-Pulsgurt anbieten. Das iPhone
 > übernimmt das für sie.
 
-**Schlüsselwörter:** Puls,Pulsgurt,Herzfrequenz,Bluetooth,MyWhoosh,Zwift,Rollentrainer,Indoor,Radfahren,Brustgurt
+**Schlüsselwörter:** Puls,Pulsgurt,Herzfrequenz,Bluetooth,Rollentrainer,Indoor,Radfahren,Brustgurt,Smarttrainer,Herzfrequenzsensor
 
-**Werbetext:** Dein Puls von der Uhr direkt in die Trainings-App auf dem Mac, ohne Brustgurt.
+**Werbetext:** Dein Puls von der Uhr direkt in Zwift, MyWhoosh und Co., ohne Brustgurt.
+
+Zwift und MyWhoosh **nicht** in die Schlüsselwörter: Fremde App- und Markennamen dort weist Apple
+ab (Regel 2.3.7). In Beschreibung und Werbetext als „funktioniert mit“ ist es üblich.
 
 ## Hinweise für die Prüfung (App Review Notes, englisch)
 
 > Pulsuhr broadcasts the heart rate measured by Apple Watch as a standard Bluetooth Low Energy
-> Heart Rate Service (0x180D), so indoor-cycling apps on a Mac (e.g. MyWhoosh) can use the watch
-> instead of a chest strap.
+> Heart Rate Service (0x180D). It is made for indoor cycling with apps like Zwift and MyWhoosh:
+> any receiver that accepts a Bluetooth chest strap (Mac, PC, iPad, Apple TV, bike computer) can
+> use the watch instead.
 >
 > Why an iPhone app: watchOS does not allow an app to act as a Bluetooth peripheral
 > (CBPeripheralManager is unavailable on watchOS). The watch measures, the iPhone relays the
@@ -57,7 +62,7 @@ Empfänger, den die Person selbst koppelt. Er geht nie an den Anbieter oder an D
 > How to test:
 > 1. Wear the Apple Watch and open Pulsuhr on it. A measurement starts and the heart rate appears.
 > 2. Open Pulsuhr on the iPhone. The status shows that the heart rate is being shared.
-> 3. On a Mac or another device, open any app that reads Bluetooth heart-rate sensors (e.g.
+> 3. On any other device, open an app that reads Bluetooth heart-rate sensors (e.g. Zwift,
 >    MyWhoosh, or the free BLE scanner LightBlue) and connect to "Pulsuhr".
 > Note: the watch must be worn. Without wrist detection it delivers no heart rate.
 >
@@ -80,8 +85,9 @@ Am einfachsten direkt am Gerät während einer echten Messung aufnehmen.
 
 ## Offen
 
-- Bluetooth-Text in den Build-Einstellungen: „koennen“ → „können“, und „auf dem Mac“ →
-  „zum Beispiel auf dem Mac“. Steht in `project.pbxproj`, also erst bei geschlossenem Xcode.
+- Bluetooth-Text in den Build-Einstellungen: „koennen“ → „können“, und „Apps auf dem Mac“ →
+  „Trainings-Apps wie Zwift oder MyWhoosh“. Steht in `project.pbxproj`, also erst bei geschlossenem Xcode.
+- Zwift am Gerät testen, bevor es im Store-Text steht (bisher nur MyWhoosh geprüft).
 - Preis festlegen (Vorschlag: gratis).
 - Screenshots aufnehmen.
 - Archivieren und hochladen (Xcode → Product → Archive), Eintrag in App Store Connect anlegen.

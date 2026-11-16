@@ -1,7 +1,8 @@
 # Pulsuhr
 
-Gibt den Puls der Apple Watch als **Bluetooth-Pulsgurt** frei, damit Apps auf dem Mac ihn lesen
-können — gebaut für **MyWhoosh**, funktioniert aber mit allem, was einen Brustgurt erwartet.
+Gibt den Puls der Apple Watch als **Bluetooth-Pulsgurt** frei. Gemacht fürs Indoor-Training mit
+**Zwift** und **MyWhoosh**. Lesen kann ihn jeder Empfänger, der einen Brustgurt erwartet: Mac, PC,
+iPad, Apple TV oder Radcomputer.
 
 **Stand 16.11.2026: am Gerät getestet mit MyWhoosh.** Läuft im Hintergrund, auch mit gesperrtem
 iPhone, und MyWhoosh verbindet sich beim nächsten Start von selbst wieder.
@@ -22,8 +23,8 @@ weist sie ab. Wer das nachprüfen will: in der Symboltabelle steht es anders als
 Also:
 
 ```
-Apple Watch                      iPhone                        Mac
-HealthKit-Workout  ──WatchConnectivity──▶  CoreBluetooth  ──BLE 0x180D──▶  MyWhoosh
+Apple Watch                      iPhone                        Empfänger
+HealthKit-Workout  ──WatchConnectivity──▶  CoreBluetooth  ──BLE 0x180D──▶  Zwift, MyWhoosh …
 (misst den Puls)                  (gibt ihn frei)
 ```
 
@@ -45,12 +46,12 @@ Bildschirm ausgeht.
 
 1. Auf der Uhr öffnen — die Messung startet von selbst.
 2. Auf dem iPhone öffnen und **zum Koppeln** offen lassen. Im Hintergrund versteckt iOS die
-   Dienstkennung so, dass ein Mac sie beim Suchen kaum findet.
-3. In MyWhoosh nach einem Pulssensor suchen. Das Gerät heisst **Pulsuhr**.
+   Dienstkennung so, dass ein Empfänger sie beim Suchen kaum findet.
+3. In Zwift, MyWhoosh oder einer anderen Trainings-App nach einem Pulssensor suchen. Das Gerät heisst **Pulsuhr**.
 4. Danach dürfen beide in den Hintergrund: Die Uhr hält ihre Trainings-Session, das iPhone hält
    die bestehende Bluetooth-Verbindung (`bluetooth-peripheral`).
 
-Das Koppeln ist nur beim ersten Mal nötig. Danach verbindet sich MyWhoosh von selbst mit
+Das Koppeln ist nur beim ersten Mal nötig. Danach verbindet sich der Empfänger von selbst mit
 **Pulsuhr**, sobald die Messung auf der Uhr läuft.
 
 ### Was die Verbindung stabil hält
@@ -67,10 +68,10 @@ Das Koppeln ist nur beim ersten Mal nötig. Danach verbindet sich MyWhoosh von s
   zeigt „Messung beendet" und meldet dem iPhone sofort `stop`. Kein automatischer Neustart (siehe
   `ARCHITECTURE.md` §4). Gleiches Muster wie `WatchWorkout.swift` in FlyMagic Hike.
 - **Wiederanlauf** (`CBPeripheralManagerOptionRestoreIdentifierKey`): Räumt iOS die App ab, darf es
-  sie im Hintergrund neu starten, wenn der Mac sich meldet. Die Brücke startet deshalb im
+  sie im Hintergrund neu starten, wenn der Empfänger sich meldet. Die Brücke startet deshalb im
   App-Delegate, nicht in der Ansicht.
 
-Zum Prüfen ohne MyWhoosh eignet sich ein BLE-Scanner auf dem Mac (z. B. LightBlue): Dort sieht man
+Zum Prüfen ohne MyWhoosh eignet sich ein BLE-Scanner (z. B. LightBlue): Dort sieht man
 roh, ob der Dienst `180D` advertisiert wird und welche Werte rausgehen.
 
 ## Testen

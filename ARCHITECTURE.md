@@ -9,9 +9,9 @@ _Stand: 16.11.2026 · Version 1.0 (Build 1) · am Gerät mit MyWhoosh getestet �
 
 ## 1. Zweck und Grenzen
 
-Pulsuhr gibt den Puls der Apple Watch als **Standard-Bluetooth-Pulsgurt** frei. Gebaut ist sie für
-**MyWhoosh auf dem Mac**, funktioniert aber mit jeder App, die einen Brustgurt erwartet (Zwift,
-LightBlue …).
+Pulsuhr gibt den Puls der Apple Watch als **Standard-Bluetooth-Pulsgurt** frei. Gemacht ist sie fürs
+Indoor-Training mit **Zwift und MyWhoosh**. Empfänger kann jedes Gerät sein, das einen Brustgurt
+liest (Mac, PC, iPad, Apple TV, Radcomputer). Getestet ist bisher MyWhoosh.
 
 **Das wichtigste Designprinzip ist Einfachheit.** Die Vorgabe lautet: den Puls freigeben, sonst
 nichts.
