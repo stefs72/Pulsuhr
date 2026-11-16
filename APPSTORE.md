@@ -86,11 +86,13 @@ Fertig im Ordner `appstore/`, ohne Alpha-Kanal:
 
 | Datei | Grösse | Für |
 |---|---|---|
-| `iphone-1-titel.png` | 1290 × 2796 | iPhone 6,9" / 6,7" – **empfohlen**, mit Überschrift |
-| `iphone-1-pur.png` | 1290 × 2796 | Alternative ohne Überschrift (leicht hochskaliert, Quelle 960 px) |
+| `iphone-1.png` | 1206 × 2622 | iPhone mit Dynamic Island (6,1"/6,3") – mit Überschrift |
 | `watch-1.png` | 410 × 502 | Apple Watch Ultra |
 
-Neu erzeugen: `swift werkzeug-storebilder.swift <quelle.jpg> <ziel.png> titel|pur`. Swift darf
+App Store Connect nimmt fürs iPhone nur noch 1206 × 2622 / 1179 × 2556 (Stand 16.11.2026);
+1290 × 2796 passte nicht mehr.
+
+Neu erzeugen: `swift werkzeug-storebilder.swift <quelle.jpg> <ziel.png> titel|pur [breite höhe]`. Swift darf
 nicht vom Schreibtisch lesen, also die Quelle vorher in einen anderen Ordner kopieren.
 
 ## Offen
