@@ -77,11 +77,16 @@ ab (Regel 2.3.7). In Beschreibung und Werbetext als „funktioniert mit“ ist e
 
 ## Screenshots
 
-- **iPhone 6,9"** (z. B. 1320 × 2868): 1–3 Bilder. Mindestens die Hauptansicht mit Puls und
-  „Empfänger verbunden“.
-- **Apple Watch** (Ultra: 410 × 502 bzw. 422 × 514, je nach Modell): 1–2 Bilder. Die Messung mit Pulszahl.
+Fertig im Ordner `appstore/`, ohne Alpha-Kanal:
 
-Am einfachsten direkt am Gerät während einer echten Messung aufnehmen.
+| Datei | Grösse | Für |
+|---|---|---|
+| `iphone-1-titel.png` | 1290 × 2796 | iPhone 6,9" / 6,7" – **empfohlen**, mit Überschrift |
+| `iphone-1-pur.png` | 1290 × 2796 | Alternative ohne Überschrift (leicht hochskaliert, Quelle 960 px) |
+| `watch-1.png` | 410 × 502 | Apple Watch Ultra |
+
+Neu erzeugen: `swift werkzeug-storebilder.swift <quelle.jpg> <ziel.png> titel|pur`. Swift darf
+nicht vom Schreibtisch lesen, also die Quelle vorher in einen anderen Ordner kopieren.
 
 ## Offen
 
@@ -89,7 +94,6 @@ Am einfachsten direkt am Gerät während einer echten Messung aufnehmen.
   „Trainings-Apps wie Zwift oder MyWhoosh“. Steht in `project.pbxproj`, also erst bei geschlossenem Xcode.
 - Zwift am Gerät testen, bevor es im Store-Text steht (bisher nur MyWhoosh geprüft).
 - Preis festlegen (Vorschlag: gratis).
-- Screenshots aufnehmen.
 - Archivieren und hochladen (Xcode → Product → Archive), Eintrag in App Store Connect anlegen.
 - Optional, aber hilfreich gegen eine Ablehnung nach Regel 4.2: ein kurzes Bildschirmvideo
   (Uhr + MyWhoosh), als Link in den Prüfhinweisen.
