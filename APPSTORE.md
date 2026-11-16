@@ -1,5 +1,7 @@
 # App Store – Einreichung Pulsuhr 1.0
 
+**Stand 16.11.2026: Build 1.0 (1) hochgeladen.**
+
 Alles, was App Store Connect verlangt, zum Hineinkopieren. Was noch fehlt, steht unter
 **Offen**.
 
@@ -11,6 +13,7 @@ Alles, was App Store Connect verlangt, zum Hineinkopieren. Was noch fehlt, steht
 | Untertitel | Apple-Watch-Puls als Pulsgurt |
 | Bundle-ID | `Moveaware.Pulsuhr` (Uhr: `Moveaware.Pulsuhr.watchkitapp`) |
 | Version / Build | 1.0 / 1 |
+| SKU | `pulsuhr-2` |
 | Kategorie | Gesundheit & Fitness |
 | Geräte | iPhone + Apple Watch (kein iPad) |
 | Datenschutz-URL | https://github.com/stefs72/Pulsuhr/blob/main/PRIVACY.md |
@@ -90,8 +93,13 @@ nicht vom Schreibtisch lesen, also die Quelle vorher in einen anderen Ordner kop
 
 ## Offen
 
+Hinweis für spätere Einreichungen: Den App-Eintrag **nicht** von Hand in App Store Connect anlegen,
+sondern beim ersten Upload von Xcode anlegen lassen (Organizer → Distribute App). Von Hand war die
+Bundle-ID der Uhr vorausgewählt; die nachträgliche Umstellung hat nicht gegriffen, der Eintrag
+musste entfernt und neu angelegt werden (SKU jetzt `pulsuhr-2`).
+
+
 - Zwift am Gerät testen, bevor es im Store-Text steht (bisher nur MyWhoosh geprüft).
 - Preis festlegen (Vorschlag: gratis).
-- Archivieren und hochladen (Xcode → Product → Archive), Eintrag in App Store Connect anlegen.
 - Optional, aber hilfreich gegen eine Ablehnung nach Regel 4.2: ein kurzes Bildschirmvideo
   (Uhr + MyWhoosh), als Link in den Prüfhinweisen.
