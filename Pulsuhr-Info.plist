@@ -17,5 +17,11 @@
 	<array>
 		<string>bluetooth-peripheral</string>
 	</array>
+	<!--
+	  Keine eigene Verschlüsselung (nur Apples Bluetooth und WatchConnectivity). Spart bei
+	  jedem Upload die Exportfrage in App Store Connect.
+	-->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

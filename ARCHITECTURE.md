@@ -289,7 +289,6 @@ Nicht eingebaut und derzeit nicht nötig. Der Test mit „sofort senden“ hat b
 - Akkuverbrauch der Uhr pro Stunde.
 - Wiederherstellung nach einem Absturz der Uhr-App (`handleActiveWorkoutRecovery`, §4). Nur auf
   Auftrag, falls sich Abstürze beim Testen tatsächlich zeigen.
-- **App Store: noch nicht eingereicht.** Dafür braucht es eine Datenschutz- und eine Support-URL,
-  etwa eine nicht verlinkte Seite unter flymagic.app. Diese liegt in einem anderen, privaten
-  Repository, also nur auf ausdrücklichen Auftrag. Ausserdem braucht es Review-Notizen zu
-  Guideline 4.2 (minimale Funktionalität).
+- **App Store: in Vorbereitung.** Texte, Prüfhinweise und die offenen Schritte stehen in
+  `APPSTORE.md`. Die Datenschutzerklärung ist `PRIVACY.md` hier im Repo, Support läuft über die
+  GitHub-Issues. So braucht es keine Seite auf einer fremden Website.
